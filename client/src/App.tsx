@@ -1,39 +1,31 @@
-// import { useEffect, useState } from 'react'
-// import GameLauncher from './GameLauncher.tsx';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-// function App() {
-//   // // 1. Create a state to store the message from the server
-//   // const [serverMessage, setServerMessage] = useState("Connecting to server...")
+import Login from './pages/auth/Login.tsx';
+import Signup from './pages/auth/Signup.tsx';
+import GameLayout from './pages/game/GameLayout.tsx';
+import Dashboard from './pages/game/Dashboard.tsx';
+import Character from './pages/game/Character.tsx';
+import Inventory from './pages/game/Inventory.tsx';
 
-//   // const savePlayer = async () => {
-//   //   const response = await fetch('http://localhost:5000/api/create-player', { method: 'POST' });
-//   //   const data = await response.json();
-//   //   alert(data.message);
-//   // };
+const App: React.FC = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        
+        {/* Nested Game Routes */}
+        <Route element={<GameLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/character" element={<Character />} />
+        </Route>
 
-//   // useEffect(() => {
-//   //   // 2. Call the status endpoint we created on port 5000
-//   //   fetch('http://localhost:5000/api/status')
-//   //     .then((res) => res.json())
-//   //     .then((data) => {
-//   //       // 3. Update the state with the server's response
-//   //       setServerMessage(data.message);
-//   //     })
-//   //     .catch((err) => {
-//   //       setServerMessage("Server is offline. Did you start it?");
-//   //       console.error("Fetch error:", err);
-//   //     });
-//   // }, []); // The empty array [] means this runs only once on load
+        <Route path="/" element={<Navigate to="/signup" />} />
+      </Routes>
+    </Router>
+  );
+};
 
-//   // return (
-//   //   <div style={{ padding: '20px', textAlign: 'center' }}>
-//   //     <h1>My MERN Game</h1>
-//   //     <p>Status: <strong>{serverMessage}</strong></p>
-//   //     <button onClick={savePlayer}>Save Player</button>
-//   //   </div>
-//   // )
-
-//   return GameLauncher
-// }
-
-// export default App
+export default App;

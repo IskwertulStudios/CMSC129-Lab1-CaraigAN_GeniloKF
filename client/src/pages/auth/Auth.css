@@ -1,0 +1,104 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-card {
+  background: #2a2a2a;
+  padding: 2rem;
+  border: 3px solid #4a4a4a;
+  border-radius: 8px;
+  width: 350px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+h1 {
+  color: #ffd700; /* Gold */
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  font-style: italic;
+  color: #888;
+  margin-bottom: 2rem;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  background: #111;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #b22222; /* Firebrick red */
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 0.1s;
+}
+
+.primary-btn:hover {
+  background-color: #d22222;
+}
+
+.primary-btn:active {
+  transform: scale(0.98);
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #6495ed;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.error-msg {
+  background: #721c24;
+  color: #f8d7da;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  border: 1px solid #f5c6cb;
+}
+
+.footer-text {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.primary-btn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  transform: none;
+}

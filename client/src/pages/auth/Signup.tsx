@@ -1,0 +1,104 @@
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import './Auth.css';
+
+const Signup: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const navigate = useNavigate();
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    // Basic Validation
+    if (password !== confirmPassword) {
+      return setError("Passwords do not match!");
+    }
+    if (password.length < 6) {
+      return setError("Password must be at least 6 characters.");
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store token and move to dashboard
+        localStorage.setItem('game_token', data.token);
+        navigate('/dashboard');
+      } else {
+        setError(data.message || "Failed to create account.");
+      }
+    } catch (err) {
+      setError("Server is offline. Try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <div className="login-card">
+        <h1>NEW HERO</h1>
+        <p className="subtitle">Forge your destiny...</p>
+
+        {error && <div className="error-msg">{error}</div>}
+        
+        <form onSubmit={handleSignup}>
+          <div className="input-group">
+            <label>Email Address</label>
+            <input 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+              placeholder="hero@example.com"
+            />
+          </div>
+          
+          <div className="input-group">
+            <label>Choose Password</label>
+            <input 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+          </div>
+
+          <div className="input-group">
+            <label>Confirm Password</label>
+            <input 
+              type="password" 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)} 
+              required 
+            />
+          </div>
+
+          <button type="submit" className="primary-btn" disabled={loading}>
+            {loading ? 'FORGING...' : 'CREATE CHARACTER'}
+          </button>
+        </form>
+
+        <p className="footer-text">
+          Already a traveler? <Link to="/login" className="toggle-btn">Login here</Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
