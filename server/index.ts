@@ -5,6 +5,8 @@ import { connectDB } from './config/connectDB.ts';
 
 import Signup from './routes/signupRoute.ts';
 import Login from './routes/loginRoute.ts';
+import Logout from './routes/logoutRoute.ts';
+// import AuthenticateToken, { IGetUserAuthInfoRequest } from './middleware/authenticateToken.ts';
 
 dotenv.config();
 const app = express();
@@ -15,6 +17,9 @@ app.use(express.json());
 
 app.use('/api/auth/signup', Signup);
 app.use('/api/auth/login', Login);
+app.use('/api/auth/logout', Logout);
+
+// app.use('api/game/step', AuthenticateToken)
 
 connectDB();
 

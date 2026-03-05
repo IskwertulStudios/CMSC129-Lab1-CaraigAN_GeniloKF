@@ -4,9 +4,20 @@ import { useNavigate } from 'react-router-dom';
 const Character: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem('game_token');
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:5000/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('game_token')}`
+        }
+      });
+    } catch (err) {
+      console.error("Server-side logout failed, proceeding with local logout.");
+    } finally {
+      localStorage.removeItem('game_token');
+      navigate('/login');
+    }
   };
 
   return (
@@ -16,10 +27,6 @@ const Character: React.FC = () => {
         <h2>Adventurer</h2>
         <p>Level 1 Novice</p>
         <hr />
-        <div className="char-stats">
-          <p>Total Steps: 152</p>
-          <p>Enemies Slain: 12</p>
-        </div>
         
         <button className="logout-btn" onClick={handleLogout}>
           LEAVE REALM (LOGOUT)
