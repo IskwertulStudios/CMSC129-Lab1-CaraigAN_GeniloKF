@@ -16,6 +16,10 @@ const Signup: React.FC = () => {
     setError('');
 
     // Basic Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return setError("Please enter a valid email address.");
+    }
     if (password !== confirmPassword) {
       return setError("Passwords do not match!");
     }

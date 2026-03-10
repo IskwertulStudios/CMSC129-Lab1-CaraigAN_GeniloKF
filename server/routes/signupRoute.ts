@@ -12,6 +12,16 @@ const Signup = async (req: express.Request, res: express.Response) => {
 
     const { email, password } = req.body;
 
+    // Validate email format server-side (defence-in-depth beyond the frontend)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format." });
+    }
+
+    if (!password || password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters." });
+    }
+
     // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
@@ -24,7 +34,7 @@ const Signup = async (req: express.Request, res: express.Response) => {
     await newUser.save();
 
     // Generate Token
-    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '24h' });
 
     res.status(201).json({ token, user: { email: newUser.email, id: newUser._id } });
   } catch (err) {

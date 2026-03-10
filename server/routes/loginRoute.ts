@@ -12,6 +12,12 @@ const Login = async (req: express.Request, res: express.Response) => {
 
     const { email, password } = req.body;
 
+    // Reject malformed email before hitting the database
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format." });
+    }
+
     // 1. Find user
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "User not found" });
