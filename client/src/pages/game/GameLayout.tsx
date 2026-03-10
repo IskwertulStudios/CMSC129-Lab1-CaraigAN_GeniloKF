@@ -1,21 +1,34 @@
 import React from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { usePlayer } from '../../contexts/PlayerContext.tsx';
 import './Dashboard.css';
+
+import ProgressBar from './props/ProgressBar.tsx';
+
 
 const GameLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  
+  const { level, gold, exp, expThreshold, hp, maxHp } = usePlayer();
 
   return (
     <div className="dashboard-container">
-      {/* Persistent Stat Bar (We'll make this dynamic later) */}
       <header className="stats-bar">
-        <div className="stat-item"><span className="label">HP:</span> 100/100</div>
-        <div className="stat-item"><span className="label">GOLD:</span> <span className="gold-text">50</span></div>
+        <div className="stat-item"><span className="label">Level:</span> {level}</div>
+        <div className="stat-item">
+          <span className="label">HP:</span>
+          <ProgressBar currentProgress={hp} threshold={maxHp} barColor="var(--hp-color)" />
+        </div>
+        <div className="stat-item"><span className="label">GOLD:</span> <span className="gold-text">${gold}</span></div>
+        <div className="stat-item">
+          <span className="label">Exp:</span>
+          <ProgressBar currentProgress={exp} threshold={expThreshold} barColor="var(--exp-color)" />
+        </div>
       </header>
 
       <main className="game-area">
-        <Outlet /> {/* This renders the specific page (Dashboard, Inventory, etc.) */}
+        <Outlet /> 
       </main>
 
       <footer className="game-nav">
