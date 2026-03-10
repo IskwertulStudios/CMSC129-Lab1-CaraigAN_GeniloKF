@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { usePlayer } from '../../contexts/PlayerContext.tsx';
 import './Auth.css';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { loadPlayerState } = usePlayer();
 
   useEffect(() => {
     const token = localStorage.getItem('game_token');
     if (token) {
-      // Hero is already in the realm, send them to the front lines
       navigate('/dashboard', { replace: true });
     }
   }, [navigate]);
-
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,8 +34,11 @@ const Login: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Store the JWT for future authenticated requests
+        // 1. Persist the token first so loadPlayerState can read it
         localStorage.setItem('game_token', data.token);
+        // 2. Hydrate PlayerContext with the saved game state from the DB
+        await loadPlayerState();
+        // 3. Only navigate once state is loaded — no flash of default values
         navigate('/dashboard');
       } else {
         setError(data.message || "Invalid credentials.");
@@ -78,7 +81,7 @@ const Login: React.FC = () => {
           </div>
 
           <button type="submit" className="primary-btn" disabled={loading}>
-            {loading ? 'AUTHENTICATING...' : 'ENTER WORLD'}
+            {loading ? 'ENTERING REALM...' : 'ENTER WORLD'}
           </button>
         </form>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { usePlayer } from '../../contexts/PlayerContext.tsx';
 import './Auth.css';
 
 const Signup: React.FC = () => {
@@ -10,6 +11,7 @@ const Signup: React.FC = () => {
   const [loading, setLoading] = useState(false);
   
   const navigate = useNavigate();
+  const { loadPlayerState } = usePlayer();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,8 +41,11 @@ const Signup: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Store token and move to dashboard
+        // 1. Persist the token first so loadPlayerState can read it
         localStorage.setItem('game_token', data.token);
+        // 2. Hydrate PlayerContext — new accounts will get all default values from DB
+        await loadPlayerState();
+        // 3. Navigate only after state is ready
         navigate('/dashboard');
       } else {
         setError(data.message || "Failed to create account.");
@@ -93,7 +98,7 @@ const Signup: React.FC = () => {
           </div>
 
           <button type="submit" className="primary-btn" disabled={loading}>
-            {loading ? 'FORGING...' : 'CREATE CHARACTER'}
+            {loading ? 'ENTERING REALM...' : 'CREATE CHARACTER'}
           </button>
         </form>
 
