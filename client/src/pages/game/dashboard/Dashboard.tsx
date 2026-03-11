@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { usePlayer } from '../../../contexts/PlayerContext.tsx';
 import { useItems } from '../../../contexts/ItemContext.tsx';
 import { useEnemy } from '../../../contexts/EnemyContext.tsx';
@@ -52,6 +52,7 @@ const Dashboard: React.FC = () => {
   } = usePlayer();
   const { rollForLoot, addItem, inventory, removeItem } = useItems();
   const { encounter, startEncounter, clearEncounter, setEncounter } = useEnemy();
+  const enemyTurnRef = useRef<() => void>(() => {});
 
   const consumables = inventory.filter(item => item.type === 'Consumable');
 
@@ -138,6 +139,8 @@ const Dashboard: React.FC = () => {
     endEncounterOnDeath(remainingHp);
   };
 
+  enemyTurnRef.current = enemyTurn;
+
   const handlePlayerAttack = () => {
     if (!encounter) return;
 
@@ -204,7 +207,7 @@ const Dashboard: React.FC = () => {
     removeItem(item.id);
 
     if (encounter) {
-      enemyTurn();
+      window.setTimeout(() => enemyTurnRef.current(), 0);
     }
   };
 

@@ -33,8 +33,9 @@ const GameLayout: React.FC = () => {
   ), [equipment]);
 
   const handleRestart = () => {
-    const stage = getStageForLevel(level);
-    localStorage.removeItem(`quests_stage_${stage.id}`);
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith('quests_stage_'))
+      .forEach((key) => localStorage.removeItem(key));
     clearEncounter();
     resetPlayer();
     resetInventory();
