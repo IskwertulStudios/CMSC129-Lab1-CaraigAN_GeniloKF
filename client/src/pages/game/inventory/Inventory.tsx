@@ -21,7 +21,7 @@ type StatChip = {
 
 const Inventory: React.FC = () => {
   const { equipment, equipItem, unequipItem } = useEquipment();
-  const { inventory, removeItem, addItem, sellItem, getItemValue } = useItems();
+  const { inventory, removeItem, addItem, sellItem, getSellValue } = useItems();
   const { regenHP, addTempBuff, hp } = usePlayer();
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
@@ -198,11 +198,10 @@ const Inventory: React.FC = () => {
 
         <div className="inventory-list">
           <div className="list-header">
-            <div style={{ flex: 1.7, textAlign: 'left' }}>Item Name</div>
-            <div style={{ flex: 0.95 }}>Type</div>
-            <div style={{ flex: 0.7 }}>Lvl</div>
-            <div style={{ flex: 0.9 }}>Rarity</div>
-            <div style={{ flex: 0.95 }}>Stat</div>
+            <div className="satchel-col satchel-name">Item Name</div>
+            <div className="satchel-col satchel-type">Type</div>
+            <div className="satchel-col satchel-rarity">Rarity</div>
+            <div className="satchel-col satchel-stat">Stat</div>
           </div>
 
           <div className="items-container">
@@ -213,24 +212,22 @@ const Inventory: React.FC = () => {
 
               return (
                 <div key={item.id} className="inventory-row" onClick={() => setSelectedItem(item)}>
-                  <div style={{ flex: 1.7, fontWeight: 'bold', textAlign: 'left' }}>
+                  <div className="satchel-col satchel-name">
                     <span className="item-icon">{itemIcons[item.type]}</span>
-                    {item.name}
+                    <span className="satchel-name-text">{item.name}</span>
                   </div>
-                  <div style={{ flex: 0.95, color: 'var(--text-muted)' }}>{item.type}</div>
-                  <div style={{ flex: 0.7 }}>{item.level}</div>
-                  <div style={{ flex: 0.9, color: `var(--${item.rarity.toLowerCase()})` }}>{item.rarity}</div>
-                  <div style={{ flex: 0.95 }} className={statClass}>{statLabel}</div>
+                  <div className="satchel-col satchel-type">{item.type}</div>
+                  <div className="satchel-col satchel-rarity" style={{ color: `var(--${item.rarity.toLowerCase()})` }}>{item.rarity}</div>
+                  <div className={"satchel-col satchel-stat " + statClass}>{statLabel}</div>
                 </div>
               );
             })}
-            
+
             {paginatedItems.length === 0 && (
               <div className="empty-message">No items found.</div>
             )}
           </div>
 
-          {/* Pagination Nav */}
           <div className="page-nav">
             <button 
               disabled={currentPage === 1} 
@@ -258,7 +255,7 @@ const Inventory: React.FC = () => {
               <div className="modal-icon">{itemIcons[selectedItem.type]}</div>
               <div>
                 <h2 style={{ color: `var(--${selectedItem.rarity.toLowerCase()})` }}>{selectedItem.name}</h2>
-                <div className="modal-sub">{selectedItem.type} • {selectedItem.rarity}</div>
+                <div className="modal-sub">{selectedItem.type}  {selectedItem.rarity}</div>
               </div>
             </div>
             <p className="flavor-text">"{selectedItem.flavorText}"</p>
@@ -283,7 +280,7 @@ const Inventory: React.FC = () => {
                     setSelectedItem(null);
                   }}
                 >
-                  Sell Item (+{getItemValue(selectedItem)} gold)
+                  Sell Item (+{getSellValue(selectedItem)} gold)
                 </button>
               )}
               <button className="modal-close" onClick={() => setSelectedItem(null)}>

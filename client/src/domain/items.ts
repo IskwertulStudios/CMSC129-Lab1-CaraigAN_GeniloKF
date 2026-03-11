@@ -69,3 +69,7 @@ export const getItemValue = (item: Item) => {
   const multiplier = rarityMultiplier[item.rarity] ?? 1;
   return Math.round(base * multiplier);
 };
+
+export const getSellValue = (item: Item) => {
+  return Math.max(1, Math.floor(getItemValue(item) * 0.4));
+};

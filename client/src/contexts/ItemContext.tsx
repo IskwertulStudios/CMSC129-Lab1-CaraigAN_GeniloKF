@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import type { Item } from './EquipmentContext';
 import { usePlayer } from './PlayerContext';
-import { itemBank, defaultStartingItems, getItemValue as calcItemValue } from '../domain/items';
+import { itemBank, defaultStartingItems, getItemValue as calcItemValue, getSellValue as calcSellValue } from '../domain/items';
 import { rollForLoot } from '../services/loot';
 import { buildStageShopStock } from '../domain/shop';
 import { getStageForLevel } from '../domain/stages';
@@ -13,6 +13,7 @@ interface ItemContextType {
   addItem: (item: Item) => void;
   removeItem: (id: number) => void;
   sellItem: (item: Item) => void;
+  getSellValue: (item: Item) => number;
   buyItem: (item: Item) => boolean;
   getItemValue: (item: Item) => number;
   rollForLoot: () => Item | null;
@@ -36,7 +37,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const removeItem = (id: number) => setInventory(prev => prev.filter(i => i.id !== id));
 
   const sellItem = (item: Item) => {
-    addGold(calcItemValue(item));
+    addGold(calcSellValue(item));
     removeItem(item.id);
   };
 
@@ -66,6 +67,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sellItem,
     buyItem,
     getItemValue: calcItemValue,
+    getSellValue: calcSellValue,
     rollForLoot: () => rollForLoot(itemBank, { luck: dexterity, level }),
     hydrateInventory,
     resetInventory,

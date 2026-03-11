@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { usePlayer } from '../../../contexts/PlayerContext.tsx';
 import { useItems } from '../../../contexts/ItemContext.tsx';
@@ -19,6 +19,9 @@ const GameLayout: React.FC = () => {
   const { resetEquipment, equipment } = useEquipment();
   const { clearEncounter } = useEnemy();
   const [pendingResetSave, setPendingResetSave] = useState(false);
+  const [levelUpNotice, setLevelUpNotice] = useState(false);
+  const [navAlerts, setNavAlerts] = useState({ shop: false, character: false });
+  const prevLevelRef = useRef(level);
 
   const lastSavedLabel = lastSavedAt
     ? `Saved ${new Date(lastSavedAt).toLocaleTimeString()}`
@@ -42,6 +45,26 @@ const GameLayout: React.FC = () => {
     resetEquipment();
     setPendingResetSave(true);
   };
+
+  useEffect(() => {
+    if (level > prevLevelRef.current) {
+      setLevelUpNotice(true);
+      setNavAlerts({ shop: true, character: true });
+      prevLevelRef.current = level;
+      const timeout = window.setTimeout(() => setLevelUpNotice(false), 4500);
+      return () => window.clearTimeout(timeout);
+    }
+    prevLevelRef.current = level;
+  }, [level]);
+
+  useEffect(() => {
+    if (location.pathname === '/shop') {
+      setNavAlerts(prev => ({ ...prev, shop: false }));
+    }
+    if (location.pathname === '/character') {
+      setNavAlerts(prev => ({ ...prev, character: false }));
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!pendingResetSave) return;
@@ -74,6 +97,13 @@ const GameLayout: React.FC = () => {
         </div>
       </header>
 
+      {levelUpNotice && (
+        <div className="level-up-toast" role="status">
+          <div className="level-up-toast-title">Level up!</div>
+          <div className="level-up-toast-body">New skill points and shop stock are available.</div>
+        </div>
+      )}
+
       <main className="game-area">
         <Outlet /> 
       </main>
@@ -86,11 +116,11 @@ const GameLayout: React.FC = () => {
           className={`nav-item ${location.pathname === '/inventory' ? 'active' : ''}`} 
           onClick={() => navigate('/inventory')}>Bag</button>
         <button 
-          className={`nav-item ${location.pathname === '/shop' ? 'active' : ''}`} 
-          onClick={() => navigate('/shop')}>Shop</button>
+          className={`nav-item ${location.pathname === '/shop' ? 'active' : ''} ${navAlerts.shop ? 'nav-attention' : ''}`} 
+          onClick={() => navigate('/shop')}>Shop{navAlerts.shop && <span className="nav-badge" aria-label="New">!</span>}</button>
         <button 
-          className={`nav-item ${location.pathname === '/character' ? 'active' : ''}`} 
-          onClick={() => navigate('/character')}>Hero</button>
+          className={`nav-item ${location.pathname === '/character' ? 'active' : ''} ${navAlerts.character ? 'nav-attention' : ''}`} 
+          onClick={() => navigate('/character')}>Hero{navAlerts.character && <span className="nav-badge" aria-label="New">!</span>}</button>
       </footer>
 
       {hp <= 0 && (

@@ -196,10 +196,13 @@
 
 .list-header {
   display: flex;
+  align-items: center;
+  gap: 1.1rem;
   text-align: center;
   padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--border-color);
   font-weight: 600;
+  font-size: 0.82rem;
   color: var(--text-muted);
   background: rgba(255, 255, 255, 0.03);
   flex-shrink: 0;
@@ -207,11 +210,13 @@
 
 .inventory-row {
   display: flex;
+  align-items: center;
+  gap: 1.1rem;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   cursor: pointer;
-  align-items: center;
   transition: background 0.2s, transform 0.2s;
+  font-size: 0.88rem;
 }
 
 .inventory-row:hover {
@@ -443,4 +448,90 @@
   background: rgba(248, 113, 113, 0.12);
   border: 1px solid rgba(248, 113, 113, 0.45);
   color: #f87171;
+}
+
+
+.satchel-col {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.satchel-type {
+  color: var(--text-muted);
+}
+
+.satchel-stat {
+  justify-content: flex-start;
+}
+
+
+.satchel-rarity {
+  flex: 0.9;
+}
+
+
+.list-header {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  text-align: center;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  flex-shrink: 0;
+}
+
+.inventory-row {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  font-size: 0.88rem;
+}
+
+.satchel-col {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.satchel-name {
+  flex: 1.5;
+  text-align: left;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-right: 0.75rem;
+}
+
+.satchel-name-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.satchel-type {
+  flex: 0.95;
+  color: var(--text-muted);
+}
+
+.satchel-rarity {
+  flex: 0.9;
+}
+
+.satchel-stat {
+  flex: 1.05;
 }

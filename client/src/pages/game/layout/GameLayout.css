@@ -215,3 +215,80 @@
 .death-restart-btn:hover {
   background: #d34b3d;
 }
+
+
+.level-up-toast {
+  position: fixed;
+  right: 1.5rem;
+  bottom: calc(var(--nav-height) + 1.5rem);
+  background: #1f2a1f;
+  border: 1px solid #3d7a3d;
+  color: #d9f2d9;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  display: grid;
+  gap: 0.25rem;
+  z-index: 1200;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  animation: level-up-toast-in 220ms ease-out;
+}
+
+.level-up-toast-title {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.level-up-toast-body {
+  color: #bfe3bf;
+  font-size: 0.9rem;
+}
+
+.nav-item.nav-attention {
+  animation: nav-highlight 1200ms ease 1;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-badge {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #ffd700;
+  color: #1a1a1a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 2px #1a1a1a;
+}
+
+@keyframes level-up-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nav-highlight {
+  0% {
+    background: none;
+    color: #666;
+  }
+  35% {
+    background: rgba(255, 215, 0, 0.18);
+    color: #ffd700;
+  }
+  100% {
+    background: none;
+    color: #666;
+  }
+}
