@@ -30,7 +30,6 @@ interface PlayerContextType {
   hp: number;
   maxHp: number;
   skillPoints: number;
-  baseStats: StatBlock;
   skillStats: StatBlock;
   attack: number;
   defense: number;
@@ -184,7 +183,6 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         hp,
         maxHp,
         skillPoints,
-        baseStats,
         skillStats,
         attack,
         defense,
