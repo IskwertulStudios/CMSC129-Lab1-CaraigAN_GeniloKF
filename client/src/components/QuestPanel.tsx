@@ -30,6 +30,8 @@ const QuestPanel: React.FC<QuestPanelProps> = ({ onRewardToast }) => {
       } catch {
         setClaimed([]);
       }
+    } else {
+      setClaimed([]);
     }
   }, [storageKey]);
 
@@ -82,7 +84,7 @@ const QuestPanel: React.FC<QuestPanelProps> = ({ onRewardToast }) => {
                 <span className="quest-progress">{Math.min(progress, quest.target)} / {quest.target}</span>
               </div>
               <button
-                className="quest-claim"
+                className={`quest-claim ${isClaimed ? 'claimed' : complete ? 'ready' : 'in-progress'}`}
                 disabled={!complete || isClaimed}
                 onClick={() => handleClaim(quest.id)}
               >

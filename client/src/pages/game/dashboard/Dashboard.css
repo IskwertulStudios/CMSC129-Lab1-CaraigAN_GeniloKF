@@ -394,3 +394,22 @@
     margin-bottom: 1rem;
   }
 }
+
+
+.quest-claim.ready {
+  background: #2a4d2a;
+  border-color: #3d7a3d;
+  color: #c9f7c9;
+}
+
+.quest-claim.in-progress {
+  background: #333;
+  border-color: #555;
+  color: #bbb;
+}
+
+.quest-claim.claimed {
+  background: #2b2b2b;
+  border-color: #444;
+  color: #8a8a8a;
+}
