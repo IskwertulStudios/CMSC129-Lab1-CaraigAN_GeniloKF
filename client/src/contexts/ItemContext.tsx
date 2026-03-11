@@ -24,7 +24,7 @@ const ItemContext = createContext<ItemContextType | undefined>(undefined);
 
 export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { addGold, spendGold, gold, dexterity, level } = usePlayer();
-  const [inventory, setInventory] = useState<Item[]>(defaultStartingItems);
+  const [inventory, setInventory] = useState<Item[]>([]);
   const stage = useMemo(() => getStageForLevel(level), [level]);
   const [shopStock, setShopStock] = useState<Item[]>(() => buildStageShopStock(itemBank, stage));
 
@@ -54,7 +54,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const resetInventory = () => {
-    setInventory(defaultStartingItems);
+    setInventory([]);
   };
 
   const value = useMemo(() => ({

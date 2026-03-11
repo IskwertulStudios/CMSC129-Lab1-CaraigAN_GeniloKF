@@ -62,12 +62,7 @@ export const itemBank: Item[] = [
   { id: 1144, name: 'Battle Focus', type: 'Consumable', level: 12, rarity: 'Epic', stat: '+6 ATK (5 steps)', flavorText: 'Your heartbeat becomes a drum.', effects: { tempBuff: { name: 'Battle Focus', bonuses: { attack: 6 }, durationSteps: 5 } } },
 ];
 
-export const defaultStartingItems: Item[] = [
-  { id: 1, name: 'Rusty Broadsword', type: 'Weapon', level: 1, rarity: 'Common', stat: '+2 ATK', flavorText: 'It\'s seen better days, but the pointy end still hurts.', bonuses: { attack: 2 } },
-  { id: 2, name: 'Lesser Health Potion', type: 'Consumable', level: 1, rarity: 'Common', stat: '+50 HP', flavorText: 'Tastes like cherry cough syrup, but it seals your wounds.', effects: { heal: 50 } },
-  { id: 3, name: 'Leather Tunic', type: 'Body Armor', level: 2, rarity: 'Uncommon', stat: '+5 DEF', flavorText: 'Smells faintly of wet dog, but it turns a blade well enough.', bonuses: { defense: 5 } },
-  { id: 5, name: 'Tattered Breeches', type: 'Pants', level: 1, rarity: 'Common', stat: '+1 DEF', flavorText: 'A bit drafty in the back.', bonuses: { defense: 1 } },
-];
+export const defaultStartingItems: Item[] = [];
 
 export const getItemValue = (item: Item) => {
   const base = 10 + item.level * 5;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { usePlayer } from '../../../contexts/PlayerContext.tsx';
 import { useItems } from '../../../contexts/ItemContext.tsx';
@@ -15,14 +15,22 @@ const GameLayout: React.FC = () => {
   const location = useLocation();
   const { level, gold, exp, expThreshold, hp, maxHp, stepsTaken, totalGoldEarned, totalDamageDealt, totalDamageReceived, totalEnemiesDefeated, resetPlayer } = usePlayer();
   const { saveNow, saving, lastSavedAt, saveError } = useSaveStatus();
-  const { resetInventory } = useItems();
-  const { resetEquipment } = useEquipment();
+  const { resetInventory, inventory } = useItems();
+  const { resetEquipment, equipment } = useEquipment();
   const { clearEncounter } = useEnemy();
   const [pendingResetSave, setPendingResetSave] = useState(false);
 
   const lastSavedLabel = lastSavedAt
     ? `Saved ${new Date(lastSavedAt).toLocaleTimeString()}`
     : 'Not saved yet';
+
+  const isDefaultInventory = useMemo(() => (
+    inventory.length === 0
+  ), [inventory]);
+
+  const isEquipmentCleared = useMemo(() => (
+    Object.values(equipment).every((item) => item == null)
+  ), [equipment]);
 
   const handleRestart = () => {
     const stage = getStageForLevel(level);
@@ -36,11 +44,11 @@ const GameLayout: React.FC = () => {
 
   useEffect(() => {
     if (!pendingResetSave) return;
-    if (hp === 100 && level === 1 && exp === 0 && gold === 0 && stepsTaken === 0) {
+    if (hp === 100 && level === 1 && exp === 0 && gold === 0 && stepsTaken === 0 && isDefaultInventory && isEquipmentCleared) {
       saveNow();
       setPendingResetSave(false);
     }
-  }, [pendingResetSave, hp, level, exp, gold, stepsTaken, saveNow]);
+  }, [pendingResetSave, hp, level, exp, gold, stepsTaken, isDefaultInventory, isEquipmentCleared, saveNow]);
 
   return (
     <div className="dashboard-container">
