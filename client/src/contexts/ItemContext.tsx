@@ -3,13 +3,13 @@ import type { Item } from './EquipmentContext';
 import { usePlayer } from './PlayerContext';
 import { itemBank, defaultStartingItems, getItemValue as calcItemValue } from '../domain/items';
 import { rollForLoot } from '../services/loot';
-import { buildShopStock, getShopRotationKey } from '../domain/shop';
+import { buildStageShopStock } from '../domain/shop';
+import { getStageForLevel } from '../domain/stages';
 
 interface ItemContextType {
   inventory: Item[];
   itemBank: Item[];
   shopStock: Item[];
-  shopRotationKey: string;
   addItem: (item: Item) => void;
   removeItem: (id: number) => void;
   sellItem: (item: Item) => void;
@@ -25,20 +25,12 @@ const ItemContext = createContext<ItemContextType | undefined>(undefined);
 export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { addGold, spendGold, gold, dexterity, level } = usePlayer();
   const [inventory, setInventory] = useState<Item[]>(defaultStartingItems);
-  const [shopRotationKey, setShopRotationKey] = useState(getShopRotationKey());
-  const [shopStock, setShopStock] = useState<Item[]>(() => buildShopStock(itemBank, getShopRotationKey()));
+  const stage = useMemo(() => getStageForLevel(level), [level]);
+  const [shopStock, setShopStock] = useState<Item[]>(() => buildStageShopStock(itemBank, stage));
 
   useEffect(() => {
-    const interval = window.setInterval(() => {
-      const nextKey = getShopRotationKey();
-      if (nextKey !== shopRotationKey) {
-        setShopRotationKey(nextKey);
-        setShopStock(buildShopStock(itemBank, nextKey));
-      }
-    }, 60000);
-
-    return () => window.clearInterval(interval);
-  }, [shopRotationKey]);
+    setShopStock(buildStageShopStock(itemBank, stage));
+  }, [stage.id]);
 
   const addItem = (item: Item) => setInventory(prev => [...prev, item]);
   const removeItem = (id: number) => setInventory(prev => prev.filter(i => i.id !== id));
@@ -69,7 +61,6 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
     inventory,
     itemBank,
     shopStock,
-    shopRotationKey,
     addItem,
     removeItem,
     sellItem,
@@ -78,7 +69,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
     rollForLoot: () => rollForLoot(itemBank, { luck: dexterity, level }),
     hydrateInventory,
     resetInventory,
-  }), [inventory, gold, dexterity, level, shopStock, shopRotationKey]);
+  }), [inventory, gold, dexterity, level, shopStock]);
 
   return (
     <ItemContext.Provider value={value}>
