@@ -4,9 +4,9 @@ import { IGetUserAuthInfoRequest } from '../middleware/authenticateToken.ts';
 
 // Enemy table — mirrors the enemies array in Dashboard.tsx exactly.
 const ENEMIES = [
-  { name: "Wild Slime",   hpLoss: 10, goldReward: 15, expReward: 20 },
-  { name: "Angry Goblin", hpLoss: 25, goldReward: 40, expReward: 50 },
-  { name: "Shadow Bat",   hpLoss: 5,  goldReward: 5,  expReward: 10 },
+  { name: "Wild Slime",   hpLoss: 10, goldReward: 10, expReward: 20 },
+  { name: "Angry Goblin", hpLoss: 25, goldReward: 25, expReward: 50 },
+  { name: "Shadow Bat",   hpLoss: 5,  goldReward: 8,  expReward: 10 },
 ];
 
 // Experience required to reach the next level.
@@ -101,7 +101,7 @@ const Step = async (req: IGetUserAuthInfoRequest, res: express.Response) => {
       }
 
       // Safe walk
-      const goldGained = Math.floor(Math.random() * 15) + 10; // 10–24
+      const goldGained = Math.floor(Math.random() * 10) + 5; // 5–14
       const expGained  = Math.floor(Math.random() * 15) + 10; // 10–24
       user.gold += goldGained;
       user.exp  += expGained;
