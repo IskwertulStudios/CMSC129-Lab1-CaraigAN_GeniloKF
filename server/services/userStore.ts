@@ -1,94 +1,32 @@
-import { getBackupUserModel, getActiveUserModel, isPrimaryConnected, isBackupConnected } from '../models/UserBackup.ts';
+import mongoose from 'mongoose';
+import User from '../models/User.ts';
 
-const isDatabaseAvailable = () => isPrimaryConnected() || isBackupConnected();
+const isDatabaseAvailable = () => mongoose.connection.readyState === 1;
 
 const findUserByEmail = async (email: string) => {
-  const ActiveUser = getActiveUserModel();
-  let user = await ActiveUser.findOne({ email });
-
-  if (!user && isPrimaryConnected() && isBackupConnected()) {
-    const BackupUser = getBackupUserModel();
-    if (BackupUser) {
-      user = await BackupUser.findOne({ email });
-    }
-  }
-
-  return user;
+  return User.findOne({ email });
 };
 
 const findUserById = async (userId: string) => {
-  const ActiveUser = getActiveUserModel();
-  let user = await ActiveUser.findById(userId);
-
-  if (!user && isPrimaryConnected() && isBackupConnected()) {
-    const BackupUser = getBackupUserModel();
-    if (BackupUser) {
-      user = await BackupUser.findById(userId);
-    }
-  }
-
-  return user;
+  return User.findById(userId);
 };
 
 const createUser = async (email: string, password: string) => {
-  const ActiveUser = getActiveUserModel();
-  const newUser = new ActiveUser({ email, password });
+  const newUser = new User({ email, password });
   await newUser.save();
-
-  if (isPrimaryConnected() && isBackupConnected()) {
-    const BackupUser = getBackupUserModel();
-    if (BackupUser) {
-      try {
-        await BackupUser.create({ email, password });
-      } catch (err) {
-        console.warn('Backup signup failed:', err);
-      }
-    }
-  }
-
   return newUser;
 };
 
 const deleteUserById = async (userId: string) => {
-  const ActiveUser = getActiveUserModel();
-  await ActiveUser.findByIdAndDelete(userId);
-
-  if (isPrimaryConnected() && isBackupConnected()) {
-    const BackupUser = getBackupUserModel();
-    if (BackupUser) {
-      try {
-        await BackupUser.findByIdAndDelete(userId);
-      } catch (err) {
-        console.warn('Backup delete failed:', err);
-      }
-    }
-  }
+  await User.findByIdAndDelete(userId);
 };
 
 const updateUserById = async (userId: string, update: Record<string, unknown>) => {
-  const ActiveUser = getActiveUserModel();
-  const user = await ActiveUser.findByIdAndUpdate(
+  return User.findByIdAndUpdate(
     userId,
     { $set: update },
     { returnDocument: 'after' }
   );
-
-  if (isPrimaryConnected() && isBackupConnected()) {
-    const BackupUser = getBackupUserModel();
-    if (BackupUser) {
-      try {
-        await BackupUser.findByIdAndUpdate(
-          userId,
-          { $set: update },
-          { returnDocument: 'after', upsert: true }
-        );
-      } catch (err) {
-        console.warn('Backup save failed:', err);
-      }
-    }
-  }
-
-  return user;
 };
 
 export {

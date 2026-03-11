@@ -19,7 +19,6 @@ Create a `.env` file in `server`:
 JWT_SECRET=your-secret
 JWT_EXPIRES_IN=24h        # optional
 MONGO_URI=your-mongo-uri
-MONGO_URI_BACKUP=...      # optional
 PORT=5000                 # optional
 ```
 
@@ -41,6 +40,22 @@ npm run dev
 - `DELETE /api/auth/delete`
 - `GET /api/player`
 - `PUT /api/player`
+
+## Backup + DR (Atlas Configuration)
+This project uses **Atlas configuration** (not app code) for primary/backup handling.
+
+Primary cluster:
+- Enable **Continuous Cloud Backup / Point-in-Time Restore**.
+- Configure retention per course requirements.
+
+Backup cluster:
+- Restore from the primary’s backups on a schedule (hourly recommended).
+- Use Atlas UI or Atlas CLI/Admin API automation for scheduled restores.
+
+Failover runbook:
+1. Restore the latest backup to the backup cluster (or verify scheduled restore ran).
+2. Promote the backup cluster by updating `MONGO_URI` to the backup cluster URI.
+3. Restart the server.
 
 ## Notes
 - Auth uses JWT with a required `JWT_SECRET`.
