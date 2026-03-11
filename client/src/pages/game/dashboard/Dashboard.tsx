@@ -213,94 +213,100 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="page-content">
-      <QuestPanel />
+    <div className="page-content dashboard-page">
+      <div className="dashboard-grid">
+        <section className="dashboard-left">
+          <QuestPanel />
+        </section>
 
-      <div className="event-log">
-        <p>{dialogueLine}</p>
-      </div>
+        <section className="dashboard-right">
+          <div className="event-log">
+            <p>{dialogueLine}</p>
+          </div>
 
-      {buffs.length > 0 && (
-        <div className="buff-panel">
-          <h4>Active Buffs</h4>
-          <div className="buff-list">
-            {buffs.map(buff => (
-              <div key={buff.id} className="buff-item">
-                <span>{buff.name}</span>
-                <span className="buff-steps">{buff.remainingSteps} steps</span>
+          {buffs.length > 0 && (
+            <div className="buff-panel">
+              <h4>Active Buffs</h4>
+              <div className="buff-list">
+                {buffs.map(buff => (
+                  <div key={buff.id} className="buff-item">
+                    <span>{buff.name}</span>
+                    <span className="buff-steps">{buff.remainingSteps} steps</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
+          )}
 
-      <div className="toast-stack">
-        {toasts.map(toast => (
-          <div key={toast.id} className="toast">
-            {toast.message}
-          </div>
-        ))}
-      </div>
-
-      <div className="action-zone">
-        {!encounter ? (
-          <div className="step-btn-wrapper">
-            {/* SVG Progress Ring Overlay */}
-            {isCooldown && (
-              <svg className="cooldown-ring" viewBox="0 0 180 180">
-                <circle 
-                  className="cooldown-circle" 
-                  cx="90" cy="90" r="86" 
-                  style={{ animationDuration: `${cooldownTime}ms` }} 
-                />
-              </svg>
-            )}
-            <button 
-              className={`step-btn ${isCooldown ? 'cooldown' : ''}`} 
-              onClick={handleStep}
-              disabled={isCooldown || hp <= 0}
-            >
-              {hp <= 0 ? 'EXHAUSTED' : isCooldown ? 'WAITING...' : 'TAKE A STEP'}
-            </button>
-          </div>
-        ) : (
-          <div className="encounter-card">
-            <div className="enemy-preview">
-              <h3>{encounter.name}</h3>
-              <div className="enemy-hp">
-                <div className="enemy-hp-bar">
-                  <div
-                    className="enemy-hp-fill"
-                    style={{ width: `${(encounter.hp / encounter.maxHp) * 100}%` }}
-                  />
+          <div className="action-zone">
+            <div className="toast-stack">
+              {toasts.map(toast => (
+                <div key={toast.id} className="toast">
+                  {toast.message}
                 </div>
-                <span>{encounter.hp}/{encounter.maxHp} HP</span>
-              </div>
-              <div className="enemy-stats">
-                <span>ATK {encounter.atk}</span>
-                <span>DEF {encounter.def}</span>
-                <span>DEX {encounter.dex}</span>
-              </div>
-            </div>
-
-            <div className="combat-actions">
-              <button className="fight-btn" onClick={handlePlayerAttack}>Attack</button>
-              <button className="skip-btn" onClick={handleRunAway}>Run Away</button>
-            </div>
-
-            <div className="combat-consumables">
-              <h4>Consumables</h4>
-              {consumables.length === 0 && (
-                <div className="risk-text">No consumables available.</div>
-              )}
-              {consumables.map(item => (
-                <button key={item.id} onClick={() => handleUseConsumable(item)}>
-                  {item.name}
-                </button>
               ))}
             </div>
+
+            {!encounter ? (
+              <div className="step-btn-wrapper">
+                {/* SVG Progress Ring Overlay */}
+                {isCooldown && (
+                  <svg className="cooldown-ring" viewBox="0 0 180 180">
+                    <circle 
+                      className="cooldown-circle" 
+                      cx="90" cy="90" r="86" 
+                      style={{ animationDuration: `${cooldownTime}ms` }} 
+                    />
+                  </svg>
+                )}
+                <button 
+                  className={`step-btn ${isCooldown ? 'cooldown' : ''}`} 
+                  onClick={handleStep}
+                  disabled={isCooldown || hp <= 0}
+                >
+                  {hp <= 0 ? 'EXHAUSTED' : isCooldown ? 'WAITING...' : 'TAKE A STEP'}
+                </button>
+              </div>
+            ) : (
+              <div className="encounter-card">
+                <div className="enemy-preview">
+                  <h3>{encounter.name}</h3>
+                  <div className="enemy-hp">
+                    <div className="enemy-hp-bar">
+                      <div
+                        className="enemy-hp-fill"
+                        style={{ width: `${(encounter.hp / encounter.maxHp) * 100}%` }}
+                      />
+                    </div>
+                    <span>{encounter.hp}/{encounter.maxHp} HP</span>
+                  </div>
+                  <div className="enemy-stats">
+                    <span>ATK {encounter.atk}</span>
+                    <span>DEF {encounter.def}</span>
+                    <span>DEX {encounter.dex}</span>
+                  </div>
+                </div>
+
+                <div className="combat-actions">
+                  <button className="fight-btn" onClick={handlePlayerAttack}>Attack</button>
+                  <button className="skip-btn" onClick={handleRunAway}>Run Away</button>
+                </div>
+
+                <div className="combat-consumables">
+                  <h4>Consumables</h4>
+                  {consumables.length === 0 && (
+                    <div className="risk-text">No consumables available.</div>
+                  )}
+                  {consumables.map(item => (
+                    <button key={item.id} onClick={() => handleUseConsumable(item)}>
+                      {item.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </section>
       </div>
     </div>
   );
