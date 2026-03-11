@@ -72,7 +72,7 @@ const GameLayout: React.FC = () => {
           <span className="label">HP:</span>
           <ProgressBar currentProgress={hp} threshold={maxHp} barColor="var(--hp-color)" />
         </div>
-        <div className="stat-item"><span className="label">GOLD:</span> <span className="gold-text">${gold}</span></div>
+        <div className="stat-item"><span className="label">GOLD:</span> <span className="gold-text">💰 {gold}g</span></div>
         <div className="stat-item">
           <span className="label">Exp:</span>
           <ProgressBar currentProgress={exp} threshold={expThreshold} barColor="var(--exp-color)" />

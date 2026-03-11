@@ -21,23 +21,23 @@ interface ShopItem {
 // Any changes here must be reflected on the server too.
 const SHOP_CATALOGUE: ShopItem[] = [
   // Tier 1 (level 1+)
-  { id: 301, name: "Health Potion",        type: "Consumable", level: 1, rarity: "Common",   stat: "+50 HP",         flavorText: "A reliable swig of crimson remedy.",             buyPrice: 30,  repeatable: true,  minLevel: 1  },
-  { id: 302, name: "Traveller's Tunic",    type: "Body Armor", level: 1, rarity: "Common",   stat: "+3 DEF",         flavorText: "Worn by a thousand wanderers before you.",       buyPrice: 40,  repeatable: false, minLevel: 1  },
-  { id: 303, name: "Wooden Club",          type: "Weapon",     level: 1, rarity: "Common",   stat: "+3 ATK",         flavorText: "A lump of oak with attitude.",                   buyPrice: 40,  repeatable: false, minLevel: 1  },
-  { id: 304, name: "Frayed Cap",           type: "Head Wear",  level: 1, rarity: "Common",   stat: "+2 DEF",         flavorText: "It keeps the rain out. Mostly.",                 buyPrice: 25,  repeatable: false, minLevel: 1  },
-  { id: 305, name: "Rough-Spun Trousers",  type: "Pants",      level: 1, rarity: "Common",   stat: "+2 DEF",         flavorText: "Itchy, but better than nothing.",                buyPrice: 25,  repeatable: false, minLevel: 1  },
+  { id: 301, name: "Health Potion",        type: "Consumable", level: 1, rarity: "Common",   stat: "+50 HP",         flavorText: "A reliable swig of crimson remedy.",             buyPrice: 45,  repeatable: true,  minLevel: 1  },
+  { id: 302, name: "Traveller's Tunic",    type: "Body Armor", level: 1, rarity: "Common",   stat: "+3 DEF",         flavorText: "Worn by a thousand wanderers before you.",       buyPrice: 70,  repeatable: false, minLevel: 1  },
+  { id: 303, name: "Wooden Club",          type: "Weapon",     level: 1, rarity: "Common",   stat: "+3 ATK",         flavorText: "A lump of oak with attitude.",                   buyPrice: 70,  repeatable: false, minLevel: 1  },
+  { id: 304, name: "Frayed Cap",           type: "Head Wear",  level: 1, rarity: "Common",   stat: "+2 DEF",         flavorText: "It keeps the rain out. Mostly.",                 buyPrice: 60,  repeatable: false, minLevel: 1  },
+  { id: 305, name: "Rough-Spun Trousers",  type: "Pants",      level: 1, rarity: "Common",   stat: "+2 DEF",         flavorText: "Itchy, but better than nothing.",                buyPrice: 60,  repeatable: false, minLevel: 1  },
   // Tier 2 (level 5+)
-  { id: 306, name: "Greater Health Potion",type: "Consumable", level: 3, rarity: "Uncommon", stat: "+120 HP",        flavorText: "Smells like berries and good decisions.",         buyPrice: 80,  repeatable: true,  minLevel: 5  },
-  { id: 307, name: "Chainmail Vest",       type: "Body Armor", level: 4, rarity: "Uncommon", stat: "+10 DEF",        flavorText: "Every ring a promise of survival.",              buyPrice: 150, repeatable: false, minLevel: 5  },
-  { id: 308, name: "Iron Sword",           type: "Weapon",     level: 4, rarity: "Uncommon", stat: "+9 ATK",         flavorText: "Reliable. Honest. Occasionally brutal.",         buyPrice: 150, repeatable: false, minLevel: 5  },
-  { id: 309, name: "Scout's Hood",         type: "Head Wear",  level: 3, rarity: "Uncommon", stat: "+5 DEF, +1 DEX", flavorText: "Shadows like you when you wear this.",           buyPrice: 100, repeatable: false, minLevel: 5  },
-  { id: 310, name: "Reinforced Leggings",  type: "Pants",      level: 4, rarity: "Uncommon", stat: "+7 DEF",         flavorText: "Stops most things below the waist.",             buyPrice: 100, repeatable: false, minLevel: 5  },
+  { id: 306, name: "Greater Health Potion",type: "Consumable", level: 3, rarity: "Uncommon", stat: "+120 HP",        flavorText: "Smells like berries and good decisions.",         buyPrice: 120, repeatable: true,  minLevel: 5  },
+  { id: 307, name: "Chainmail Vest",       type: "Body Armor", level: 4, rarity: "Uncommon", stat: "+10 DEF",        flavorText: "Every ring a promise of survival.",              buyPrice: 220, repeatable: false, minLevel: 5  },
+  { id: 308, name: "Iron Sword",           type: "Weapon",     level: 4, rarity: "Uncommon", stat: "+9 ATK",         flavorText: "Reliable. Honest. Occasionally brutal.",         buyPrice: 220, repeatable: false, minLevel: 5  },
+  { id: 309, name: "Scout's Hood",         type: "Head Wear",  level: 3, rarity: "Uncommon", stat: "+5 DEF, +1 DEX", flavorText: "Shadows like you when you wear this.",           buyPrice: 160, repeatable: false, minLevel: 5  },
+  { id: 310, name: "Reinforced Leggings",  type: "Pants",      level: 4, rarity: "Uncommon", stat: "+7 DEF",         flavorText: "Stops most things below the waist.",             buyPrice: 160, repeatable: false, minLevel: 5  },
   // Tier 3 (level 10+)
-  { id: 311, name: "Elixir of Fortitude",  type: "Consumable", level: 5, rarity: "Rare",     stat: "+250 HP",        flavorText: "One sip and the ground fears your footsteps.",   buyPrice: 200, repeatable: true,  minLevel: 10 },
-  { id: 312, name: "Plate Cuirass",        type: "Body Armor", level: 6, rarity: "Rare",     stat: "+18 DEF",        flavorText: "Forged in the fires of a serious craftsman.",    buyPrice: 400, repeatable: false, minLevel: 10 },
-  { id: 313, name: "Runed Blade",          type: "Weapon",     level: 6, rarity: "Rare",     stat: "+16 ATK",        flavorText: "The runes hum softly. They hunger.",             buyPrice: 400, repeatable: false, minLevel: 10 },
-  { id: 314, name: "Warhelm",              type: "Head Wear",  level: 6, rarity: "Rare",     stat: "+14 DEF",        flavorText: "The visor makes everything look like a battlefield.", buyPrice: 300, repeatable: false, minLevel: 10 },
-  { id: 315, name: "Greatplate Greaves",   type: "Pants",      level: 6, rarity: "Rare",     stat: "+12 DEF",        flavorText: "Your stride now echoes three seconds later.",    buyPrice: 300, repeatable: false, minLevel: 10 },
+  { id: 311, name: "Elixir of Fortitude",  type: "Consumable", level: 5, rarity: "Rare",     stat: "+250 HP",        flavorText: "One sip and the ground fears your footsteps.",   buyPrice: 280, repeatable: true,  minLevel: 10 },
+  { id: 312, name: "Plate Cuirass",        type: "Body Armor", level: 6, rarity: "Rare",     stat: "+18 DEF",        flavorText: "Forged in the fires of a serious craftsman.",    buyPrice: 550, repeatable: false, minLevel: 10 },
+  { id: 313, name: "Runed Blade",          type: "Weapon",     level: 6, rarity: "Rare",     stat: "+16 ATK",        flavorText: "The runes hum softly. They hunger.",             buyPrice: 550, repeatable: false, minLevel: 10 },
+  { id: 314, name: "Warhelm",              type: "Head Wear",  level: 6, rarity: "Rare",     stat: "+14 DEF",        flavorText: "The visor makes everything look like a battlefield.", buyPrice: 420, repeatable: false, minLevel: 10 },
+  { id: 315, name: "Greatplate Greaves",   type: "Pants",      level: 6, rarity: "Rare",     stat: "+12 DEF",        flavorText: "Your stride now echoes three seconds later.",    buyPrice: 420, repeatable: false, minLevel: 10 },
 ];
 
 const TIERS = [
