@@ -21,7 +21,7 @@ type StatChip = {
 
 const Inventory: React.FC = () => {
   const { equipment, equipItem, unequipItem } = useEquipment();
-  const { inventory, removeItem, addItem, sellItem } = useItems();
+  const { inventory, removeItem, addItem, sellItem, getItemValue } = useItems();
   const { regenHP, addTempBuff, hp } = usePlayer();
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
@@ -283,7 +283,7 @@ const Inventory: React.FC = () => {
                     setSelectedItem(null);
                   }}
                 >
-                  Sell Item
+                  Sell Item (+{getItemValue(selectedItem)} gold)
                 </button>
               )}
               <button className="modal-close" onClick={() => setSelectedItem(null)}>
