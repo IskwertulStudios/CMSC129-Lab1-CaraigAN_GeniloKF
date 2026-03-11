@@ -17,6 +17,7 @@ interface ItemContextType {
   getItemValue: (item: Item) => number;
   rollForLoot: () => Item | null;
   hydrateInventory: (items: Item[]) => void;
+  resetInventory: () => void;
 }
 
 const ItemContext = createContext<ItemContextType | undefined>(undefined);
@@ -60,6 +61,10 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setInventory(items);
   };
 
+  const resetInventory = () => {
+    setInventory(defaultStartingItems);
+  };
+
   const value = useMemo(() => ({
     inventory,
     itemBank,
@@ -72,6 +77,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
     getItemValue: calcItemValue,
     rollForLoot: () => rollForLoot(itemBank, { luck: dexterity, level }),
     hydrateInventory,
+    resetInventory,
   }), [inventory, gold, dexterity, level, shopStock, shopRotationKey]);
 
   return (
@@ -86,3 +92,6 @@ export const useItems = () => {
   if (!context) throw new Error('useItems must be used within ItemProvider');
   return context;
 };
+
+
+

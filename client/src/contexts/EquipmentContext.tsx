@@ -29,6 +29,7 @@ interface EquipmentContextType {
   equipItem: (item: Item) => void;
   unequipItem: (slot: EquipmentSlot) => void;
   hydrateEquipment: (next: Partial<Record<EquipmentSlot, Item | null>>) => void;
+  resetEquipment: () => void;
 }
 
 const EquipmentContext = createContext<EquipmentContextType | undefined>(undefined);
@@ -57,8 +58,12 @@ export const EquipmentProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setEquipment(prev => ({ ...prev, ...next }));
   };
 
+  const resetEquipment = () => {
+    setEquipment({ ...initialEquipment });
+  };
+
   return (
-    <EquipmentContext.Provider value={{ equipment, equipItem, unequipItem, hydrateEquipment }}>
+    <EquipmentContext.Provider value={{ equipment, equipItem, unequipItem, hydrateEquipment, resetEquipment }}>
       {children}
     </EquipmentContext.Provider>
   );
@@ -69,3 +74,5 @@ export const useEquipment = () => {
   if (!context) throw new Error('useEquipment must be used within EquipmentProvider');
   return context;
 };
+
+

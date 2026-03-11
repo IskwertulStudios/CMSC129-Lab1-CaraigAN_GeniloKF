@@ -187,6 +187,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleUseConsumable = (item: Item) => {
+    if (hp <= 0) return;
     const healAmount = item.effects?.heal ?? 0;
     const tempBuff = item.effects?.tempBuff;
 

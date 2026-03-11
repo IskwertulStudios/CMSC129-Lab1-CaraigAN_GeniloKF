@@ -79,6 +79,7 @@ interface PlayerContextType {
   recordEnemyDefeat: () => void;
   addTempBuff: (name: string, bonuses: Partial<StatBlock>, durationSteps: number) => void;
   hydratePlayer: (data: Partial<PlayerSaveData>) => void;
+  resetPlayer: () => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -211,6 +212,23 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (typeof data.totalEnemiesDefeated === 'number') setTotalEnemiesDefeated(data.totalEnemiesDefeated);
   };
 
+  const resetPlayer = () => {
+    setLevel(1);
+    setGold(0);
+    setExp(0);
+    setHp(100);
+    setMaxHp(100);
+    setExpThreshold(100);
+    setSkillPoints(0);
+    setSkillStats(emptyStats);
+    setBuffs([]);
+    setStepsTaken(0);
+    setTotalDamageDealt(0);
+    setTotalDamageReceived(0);
+    setTotalGoldEarned(0);
+    setTotalEnemiesDefeated(0);
+  };
+
   const derivedStats = useMemo(() => {
     const equipmentBonus = Object.values(equipment).reduce<StatBlock>((acc, item) => {
       if (!item?.bonuses) return acc;
@@ -273,6 +291,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         recordEnemyDefeat,
         addTempBuff,
         hydratePlayer,
+        resetPlayer,
       }}
     >
       {children}
@@ -285,3 +304,6 @@ export const usePlayer = () => {
   if (!context) throw new Error('usePlayer must be used within PlayerProvider');
   return context;
 };
+
+
+

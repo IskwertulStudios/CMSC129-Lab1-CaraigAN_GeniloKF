@@ -26,7 +26,7 @@ type PendingTimers = Record<number, number>;
 const Inventory: React.FC = () => {
   const { equipment, equipItem, unequipItem } = useEquipment();
   const { inventory, removeItem, addItem } = useItems();
-  const { regenHP, addTempBuff } = usePlayer();
+  const { regenHP, addTempBuff, hp } = usePlayer();
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [throwNotice, setThrowNotice] = useState<Item | null>(null);
   const [pendingTrash, setPendingTrash] = useState<PendingTrash>({});
@@ -120,6 +120,7 @@ const Inventory: React.FC = () => {
   };
 
   const handleUseItem = (item: Item) => {
+    if (hp <= 0) return;
     const healAmount = item.effects?.heal ?? 0;
     const tempBuff = item.effects?.tempBuff;
 

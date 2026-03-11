@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { usePlayer } from '../../../contexts/PlayerContext.tsx';
+import { useItems } from '../../../contexts/ItemContext.tsx';
+import { useEquipment } from '../../../contexts/EquipmentContext.tsx';
+import { useEnemy } from '../../../contexts/EnemyContext.tsx';
+import { getDailyQuestSet } from '../../../domain/quests';
 import './GameLayout.css';
 
 import ProgressBar from '../components/ProgressBar.tsx';
@@ -9,12 +13,34 @@ import { useSaveStatus } from '../../../contexts/SaveContext.tsx';
 const GameLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { level, gold, exp, expThreshold, hp, maxHp } = usePlayer();
+  const { level, gold, exp, expThreshold, hp, maxHp, stepsTaken, totalGoldEarned, totalDamageDealt, totalDamageReceived, totalEnemiesDefeated, resetPlayer } = usePlayer();
   const { saveNow, saving, lastSavedAt, saveError } = useSaveStatus();
+  const { resetInventory } = useItems();
+  const { resetEquipment } = useEquipment();
+  const { clearEncounter } = useEnemy();
+  const [pendingResetSave, setPendingResetSave] = useState(false);
 
   const lastSavedLabel = lastSavedAt
     ? `Saved ${new Date(lastSavedAt).toLocaleTimeString()}`
     : 'Not saved yet';
+
+  const handleRestart = () => {
+    const { dateKey } = getDailyQuestSet();
+    localStorage.removeItem(`quests_${dateKey}`);
+    clearEncounter();
+    resetPlayer();
+    resetInventory();
+    resetEquipment();
+    setPendingResetSave(true);
+  };
+
+  useEffect(() => {
+    if (!pendingResetSave) return;
+    if (hp === 100 && level === 1 && exp === 0 && gold === 0 && stepsTaken === 0) {
+      saveNow();
+      setPendingResetSave(false);
+    }
+  }, [pendingResetSave, hp, level, exp, gold, stepsTaken, saveNow]);
 
   return (
     <div className="dashboard-container">
@@ -57,8 +83,52 @@ const GameLayout: React.FC = () => {
           className={`nav-item ${location.pathname === '/character' ? 'active' : ''}`} 
           onClick={() => navigate('/character')}>Hero</button>
       </footer>
+
+      {hp <= 0 && (
+        <div className="death-overlay">
+          <div className="death-modal">
+            <h2>YOU HAVE FALLEN</h2>
+            <p className="death-sub">Your journey ends here.</p>
+            <div className="death-stats">
+              <h3>Adventure Stats</h3>
+              <div className="death-stats-grid">
+                <div>
+                  <span>Steps Taken</span>
+                  <strong>{stepsTaken}</strong>
+                </div>
+                <div>
+                  <span>Gold Earned</span>
+                  <strong>{totalGoldEarned}</strong>
+                </div>
+                <div>
+                  <span>Damage Dealt</span>
+                  <strong>{totalDamageDealt}</strong>
+                </div>
+                <div>
+                  <span>Damage Received</span>
+                  <strong>{totalDamageReceived}</strong>
+                </div>
+                <div>
+                  <span>Enemies Defeated</span>
+                  <strong>{totalEnemiesDefeated}</strong>
+                </div>
+              </div>
+            </div>
+            <button className="death-restart-btn" onClick={handleRestart}>
+              Restart Journey
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
 
 export default GameLayout;
+
+
+
+
+
+
