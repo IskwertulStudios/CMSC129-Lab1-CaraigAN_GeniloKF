@@ -1,54 +1,82 @@
 import type { Item } from '../contexts/EquipmentContext';
+import { rarityMultiplier } from './items';
+import type { Stage } from './stages';
 
-const ROTATION_HOURS = 6;
+const getItemPower = (item: Item) => {
+  let score = item.level * 10;
+  score += (rarityMultiplier[item.rarity] ?? 1) * 15;
 
-const hashSeed = (seed: string) => {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i += 1) {
-    hash = (hash << 5) - hash + seed.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-};
-
-const seededRandom = (seed: string) => {
-  let value = hashSeed(seed) || 1;
-  return () => {
-    value = (value * 48271) % 2147483647;
-    return (value & 0x7fffffff) / 2147483647;
-  };
-};
-
-const getShopRotationKey = (date = new Date()) => {
-  const block = Math.floor(date.getHours() / ROTATION_HOURS);
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${block}`;
-};
-
-const getNextRotationDate = (date = new Date()) => {
-  const block = Math.floor(date.getHours() / ROTATION_HOURS);
-  const nextBlockHour = (block + 1) * ROTATION_HOURS;
-  const next = new Date(date);
-
-  if (nextBlockHour >= 24) {
-    next.setDate(next.getDate() + 1);
-    next.setHours(0, 0, 0, 0);
-  } else {
-    next.setHours(nextBlockHour, 0, 0, 0);
+  if (item.bonuses) {
+    score += (item.bonuses.attack ?? 0) * 10;
+    score += (item.bonuses.defense ?? 0) * 10;
+    score += (item.bonuses.dexterity ?? 0) * 10;
   }
 
-  return next;
+  if (item.effects?.heal) {
+    score += Math.round(item.effects.heal / 5);
+  }
+
+  if (item.effects?.tempBuff) {
+    const bonuses = item.effects.tempBuff.bonuses;
+    score += (bonuses.attack ?? 0) * 8;
+    score += (bonuses.defense ?? 0) * 8;
+    score += (bonuses.dexterity ?? 0) * 8;
+    score += Math.max(1, Math.round(item.effects.tempBuff.durationSteps / 2));
+  }
+
+  return score;
 };
 
-const buildShopStock = (items: Item[], rotationKey: string, size = 12) => {
-  const rng = seededRandom(rotationKey);
+const weightedPickIndex = (weights: number[]) => {
+  const total = weights.reduce((sum, value) => sum + value, 0);
+  if (total <= 0) return 0;
+  let roll = Math.random() * total;
+  for (let i = 0; i < weights.length; i += 1) {
+    roll -= weights[i];
+    if (roll <= 0) return i;
+  }
+  return weights.length - 1;
+};
+
+const pickLevelBand = (stage: Stage) => {
+  const bands = stage.shop.levelBands;
+  const weights = bands.map((band) => band.weight);
+  const index = weightedPickIndex(weights);
+  return bands[index];
+};
+
+const buildStageShopStock = (items: Item[], stage: Stage, size = 12) => {
   const pool = [...items];
+  const stock: Item[] = [];
 
-  for (let i = pool.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(rng() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
+  const powerScores = pool.map(getItemPower);
+  const minPower = Math.min(...powerScores, 1);
+  const maxPower = Math.max(...powerScores, minPower + 1);
+
+  const toPowerWeight = (item: Item) => {
+    const score = getItemPower(item);
+    const normalized = (score - minPower) / (maxPower - minPower);
+    return stage.shop.powerWeighting.min + normalized * (stage.shop.powerWeighting.max - stage.shop.powerWeighting.min);
+  };
+
+  while (stock.length < size && pool.length > 0) {
+    const band = pickLevelBand(stage);
+    const bandItems = pool.filter((item) => item.level >= band.min && item.level <= band.max);
+    const candidates = bandItems.length ? bandItems : pool;
+
+    const weights = candidates.map((item) => {
+      const rarityWeight = stage.shop.rarityWeights[item.rarity] ?? 0;
+      return Math.max(0.1, rarityWeight) * toPowerWeight(item);
+    });
+
+    const pickedIndex = weightedPickIndex(weights);
+    const picked = candidates[pickedIndex];
+    stock.push(picked);
+    const poolIndex = pool.findIndex((item) => item.id === picked.id);
+    if (poolIndex >= 0) pool.splice(poolIndex, 1);
   }
 
-  return pool.slice(0, Math.min(size, pool.length));
+  return stock;
 };
 
-export { getShopRotationKey, getNextRotationDate, buildShopStock, ROTATION_HOURS };
+export { buildStageShopStock, getItemPower };
