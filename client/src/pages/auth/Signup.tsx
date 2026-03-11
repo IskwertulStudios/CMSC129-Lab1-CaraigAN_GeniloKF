@@ -51,7 +51,7 @@ const Signup: React.FC = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1>NEW HERO</h1>
+        <h1>Tap Tap Travel</h1>
         <p className="subtitle">Forge your destiny...</p>
 
         {error && <div className="error-msg">{error}</div>}

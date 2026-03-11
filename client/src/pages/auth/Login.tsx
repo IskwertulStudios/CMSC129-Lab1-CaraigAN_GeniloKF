@@ -50,7 +50,7 @@ const Login: React.FC = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1>QUEST STEPPER</h1>
+        <h1>Tap Tap Travel</h1>
         <p className="subtitle">Welcome back, Hero.</p>
 
         {error && <div className="error-msg">{error}</div>}
